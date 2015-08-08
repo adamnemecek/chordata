@@ -15,6 +15,7 @@ public class PianoKeyModel {
         self.secondaryPianoKeyIdentity = secondaryPianoKeyIdentity
         self.isWhiteKey = isWhiteKey
         self.octave = octave
+        self.isSelected = false
         
         if (self.isWhiteKey) {
             self.defaultColor = UIColor.whiteColor()
@@ -29,6 +30,7 @@ public class PianoKeyModel {
     var isWhiteKey: Bool
     var octave: Int
     var defaultColor: UIColor
+    var isSelected: Bool!
     
     
     static func getPianoKeyModels() -> [PianoKeyModel] {

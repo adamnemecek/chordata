@@ -15,6 +15,7 @@
 		37DC45901B765E5400328EC0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 37DC458F1B765E5400328EC0 /* Assets.xcassets */; };
 		37DC45931B765E5400328EC0 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 37DC45911B765E5400328EC0 /* LaunchScreen.storyboard */; };
 		37DC459B1B765F6C00328EC0 /* PianoKeyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37DC459A1B765F6C00328EC0 /* PianoKeyModel.swift */; };
+		37DC459D1B76C20000328EC0 /* ScaleDefinition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37DC459C1B76C20000328EC0 /* ScaleDefinition.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +29,7 @@
 		37DC45921B765E5400328EC0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		37DC45941B765E5400328EC0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		37DC459A1B765F6C00328EC0 /* PianoKeyModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PianoKeyModel.swift; sourceTree = "<group>"; };
+		37DC459C1B76C20000328EC0 /* ScaleDefinition.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScaleDefinition.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -69,6 +71,7 @@
 				37DC45911B765E5400328EC0 /* LaunchScreen.storyboard */,
 				37DC45941B765E5400328EC0 /* Info.plist */,
 				37DC459A1B765F6C00328EC0 /* PianoKeyModel.swift */,
+				37DC459C1B76C20000328EC0 /* ScaleDefinition.swift */,
 			);
 			path = Chordata;
 			sourceTree = "<group>";
@@ -146,6 +149,7 @@
 			files = (
 				37DC45891B765E5400328EC0 /* GameScene.swift in Sources */,
 				37DC458B1B765E5400328EC0 /* GameViewController.swift in Sources */,
+				37DC459D1B76C20000328EC0 /* ScaleDefinition.swift in Sources */,
 				37DC45851B765E5400328EC0 /* AppDelegate.swift in Sources */,
 				37DC459B1B765F6C00328EC0 /* PianoKeyModel.swift in Sources */,
 			);
