@@ -8,14 +8,14 @@
 
 import SpriteKit
 
-class GameScene: SKScene {
+class GameScene: SKScene, UITextViewDelegate {
     var pianoKeyModels : [PianoKeyModel]!
     var pianoKeyNodes : [SKSpriteNode]!
     var currentTouches : Set<UITouch>!
     var lastTouchStartTime : NSDate?
     var chordInProgress: Bool!
     var chordLabelNode: SKLabelNode!
-    var scaleDataLabelNode: SKLabelNode!
+    var scaleDataTextView: UITextView!
     
     var xSceneOffset = -0
     var ySceneOffset = 640
@@ -30,17 +30,18 @@ class GameScene: SKScene {
         self.chordLabelNode = SKLabelNode(text: "");
         self.chordLabelNode.fontSize = 30
         self.chordLabelNode.fontName = "AvenirNext-Bold"
-        self.chordLabelNode.text = "!!!"
+        self.chordLabelNode.text = ""
         self.chordLabelNode.position = CGPointMake(UIScreen.mainScreen().bounds.size.width  / 2, 500)
         self.addChild(self.chordLabelNode)
         
-        self.scaleDataLabelNode = SKLabelNode()
-        self.scaleDataLabelNode.fontSize = 30
-        self.scaleDataLabelNode.fontName = "AvenirNext-Bold"
-        self.scaleDataLabelNode.text = "!!!"
-        self.scaleDataLabelNode.fontColor = UIColor(red: 0.2, green: 0.7, blue: 0.7, alpha: 1.0)
-        self.scaleDataLabelNode.position = CGPointMake(UIScreen.mainScreen().bounds.size.width  / 2, 450)
-        self.addChild( self.scaleDataLabelNode )
+        
+        
+        scaleDataTextView = UITextView(frame: CGRectMake(view.bounds.width / 2 - 260, view.bounds.height / 2 - 100, 620, 340))
+        scaleDataTextView.delegate = self
+        scaleDataTextView.textColor = UIColor(red: 0.2, green: 0.7, blue: 0.7, alpha: 1.0)
+        scaleDataTextView.font = UIFont(name: "AvenirNext-Bold", size: 30)
+        scaleDataTextView.backgroundColor = SKColor.clearColor()
+        view.addSubview(scaleDataTextView)
         
         createPianoKeys()
     }
@@ -222,14 +223,14 @@ class GameScene: SKScene {
                         if (allExist) {
                             // Add to list of scales
                             if (scalesDescription != "") {
-                                scalesDescription += ", "
+                                scalesDescription += "\r\n"
                             }
-                            scalesDescription += chordRoot + " " + scaleDefinition.name + " "
+                            scalesDescription += chordRoot + " " + scaleDefinition.name + " " + scaleDefinition.keys.description
                         }
                         
                     }
                     
-                    scaleDataLabelNode.text = scalesDescription
+                    scaleDataTextView.text = scalesDescription
                     
                 }
             }
