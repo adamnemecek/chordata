@@ -167,18 +167,33 @@ class GameScene: SKScene {
                         }
                         
                         if (keyModel.isSelected!) {
-                            if (chordLabelText != "") {
-                                chordLabelText += ", "
-                            }
-                            var noteDescription = keyModel.primaryPianoKeyIdentity.keyBase.description + keyModel.primaryPianoKeyIdentity.keyModifier.description
-                            if (chordRoot == "" ) {
-                                chordRoot = noteDescription
-                            }
-                            chordLabelText += noteDescription
                             
-                            noteIndices.append(noteCounter)
+                            let moddedCounter = noteCounter % 12
+                            
+                            var alreadySeen = false
+                            for existingIndex in noteIndices {
+                                if (moddedCounter == existingIndex) {
+                                    alreadySeen = true
+                                    break
+                                }
+                            }
+                            
+                            if (!alreadySeen) {
+                            
+                                if (chordLabelText != "") {
+                                    chordLabelText += ", "
+                                }
+                                let noteDescription = keyModel.primaryPianoKeyIdentity.keyBase.description + keyModel.primaryPianoKeyIdentity.keyModifier.description
+                                if (chordRoot == "" ) {
+                                    chordRoot = noteDescription
+                                }
+                                chordLabelText += noteDescription
+                            
+                                noteIndices.append(moddedCounter)
+                            }
                         }
                     }
+                    noteIndices = noteIndices.sort()
                     
                     chordLabelText += " " + noteIndices.description
                     
