@@ -41,6 +41,7 @@ class GameScene: SKScene, UITextViewDelegate {
         scaleDataTextView.textColor = UIColor(red: 0.2, green: 0.7, blue: 0.7, alpha: 1.0)
         scaleDataTextView.font = UIFont(name: "AvenirNext-Bold", size: 30)
         scaleDataTextView.backgroundColor = SKColor.clearColor()
+        scaleDataTextView.editable = false
         view.addSubview(scaleDataTextView)
         
         createPianoKeys()
