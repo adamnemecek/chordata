@@ -11,11 +11,10 @@ import SpriteKit
 class GameScene: SKScene, UITextViewDelegate {
     var pianoKeyModels : [PianoKeyModel]!
     var pianoKeyNodes : [SKSpriteNode]!
-    var currentTouches : Set<UITouch>!
     var lastTouchStartTime : NSDate?
-    var chordInProgress: Bool!
     var chordLabelNode: SKLabelNode!
     var scaleDataTextView: UITextView!
+    var shouldUpdate: Bool = false
     
     var xSceneOffset = -0
     var ySceneOffset = 640
@@ -23,9 +22,7 @@ class GameScene: SKScene, UITextViewDelegate {
     override func didMoveToView(view: SKView) {
       
         self.backgroundColor = UIColor(red: 0.1, green: 0.2, blue: 0.5, alpha: 1.0)
-        self.currentTouches = Set<UITouch>()
         self.lastTouchStartTime = nil
-        self.chordInProgress = false
         
         self.chordLabelNode = SKLabelNode(text: "");
         self.chordLabelNode.fontSize = 30
@@ -36,7 +33,7 @@ class GameScene: SKScene, UITextViewDelegate {
         
         
         
-        scaleDataTextView = UITextView(frame: CGRectMake(view.bounds.width / 2 - 260, view.bounds.height / 2 - 100, 620, 340))
+        scaleDataTextView = UITextView(frame: CGRectMake(view.bounds.width / 2 - 260, view.bounds.height / 2 - 100, 620, 440))
         scaleDataTextView.delegate = self
         scaleDataTextView.textColor = UIColor(red: 0.2, green: 0.7, blue: 0.7, alpha: 1.0)
         scaleDataTextView.font = UIFont(name: "AvenirNext-Bold", size: 30)
@@ -73,6 +70,11 @@ class GameScene: SKScene, UITextViewDelegate {
                 labelNode.position.y = -70
                 labelNode.fontColor = UIColor.blackColor()
             } else {
+                let wrapperNode = SKSpriteNode(color: UIColor.blackColor(), size: CGSizeMake(50,112) )
+                wrapperNode.position = CGPointMake( CGFloat(xOffset * 68 + 36 + xSceneOffset), CGFloat(ySceneOffset + 24))
+                wrapperNode.zPosition = 1
+                self.addChild(wrapperNode)
+                
                 keyNode = SKSpriteNode(color: keyModel.defaultColor, size: CGSizeMake(46,110) )
                 keyNode.position = CGPointMake( CGFloat(xOffset * 68 + 36 + xSceneOffset), CGFloat(ySceneOffset + 25))
                 keyNode.zPosition = 2
@@ -98,65 +100,37 @@ class GameScene: SKScene, UITextViewDelegate {
             for touchedNode in self.nodesAtPoint(location) {
                 let touchedSkNode = touchedNode as? SKSpriteNode
                 if (touchedSkNode != nil) {
-                    let pianoKeyModel = touchedSkNode?.userData!.objectForKey("keyModel") as! PianoKeyModel
-                    pianoKeyModel.isSelected = true
-                    self.lastTouchStartTime = NSDate()
-                    self.chordInProgress = true
-                    currentTouches.insert(touch)
-                    touchedSkNode!.color = UIColor.redColor()
-                    break
+                    if (touchedSkNode?.userData != nil) {
+                        let pianoKeyModel = touchedSkNode?.userData!.objectForKey("keyModel") as! PianoKeyModel
+                        if (pianoKeyModel.isSelected!) {
+                            pianoKeyModel.isSelected = false
+                            touchedSkNode!.color = pianoKeyModel.defaultColor
+                        } else {
+                            pianoKeyModel.isSelected = true
+                            touchedSkNode!.color = UIColor.redColor()
+
+                        }
+                        self.shouldUpdate = true
+                        self.lastTouchStartTime = NSDate()
+                        break
+                    }
                 }
             }
         }
     }
-    
-    override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
-        
-      
-        for touch in touches {
-            let location = touch.locationInNode(self)
-            
-            for touchedNode in self.nodesAtPoint(location) {
-                let touchedSkNode = touchedNode as? SKSpriteNode
-                if (touchedSkNode != nil) {
-                    let pianoKeyModel = touchedSkNode?.userData!.objectForKey("keyModel") as! PianoKeyModel
-                    touchedSkNode!.color = pianoKeyModel.defaultColor
-                    pianoKeyModel.isSelected = false
-                    break
-                }
-                
-            }
-            currentTouches.remove(touch)
-        }
-        
-        if (self.currentTouches.count == 0) {
-            clearAllStuff()
-            self.chordInProgress = false
-        }
-    }
-  
-
-    func clearAllStuff() {
-        for node in self.pianoKeyNodes {
-            let pianoKeyModel = node.userData!.objectForKey("keyModel") as! PianoKeyModel
-            node.color = pianoKeyModel.defaultColor
-            pianoKeyModel.isSelected = false
-
-        }
-    }
+   
     
     override func update(currentTime: CFTimeInterval) {
         /* Called before each frame is rendered */
-        
-        if (self.chordInProgress!) {
+     
+        if (shouldUpdate) {
             if (self.lastTouchStartTime != nil) {
                 let diff = self.lastTouchStartTime!.timeIntervalSinceNow * -1000.0
                 
-                if (diff > 1000) {
+                if (diff > 250) {
                     // Do chord lookup
                     
                     self.chordLabelNode.text = "Chord"
-                    self.chordInProgress! = false
                     
                     // Show chord
                     var chordLabelText = ""
@@ -232,10 +206,11 @@ class GameScene: SKScene, UITextViewDelegate {
                     }
                     
                     scaleDataTextView.text = scalesDescription
+                    self.shouldUpdate = false
                     
                 }
             }
+      
         }
-        
     }
 }
