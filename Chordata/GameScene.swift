@@ -11,6 +11,7 @@ import SpriteKit
 class GameScene: SKScene, UITextViewDelegate {
     var pianoKeyModels : [PianoKeyModel]!
     var pianoKeyNodes : [SKSpriteNode]!
+    var clearButton : SKSpriteNode!
     var lastTouchStartTime : NSDate?
     var chordLabelNode: SKLabelNode!
     var scaleDataTextView: UITextView!
@@ -40,6 +41,16 @@ class GameScene: SKScene, UITextViewDelegate {
         scaleDataTextView.backgroundColor = SKColor.clearColor()
         scaleDataTextView.editable = false
         view.addSubview(scaleDataTextView)
+        
+        self.clearButton = SKSpriteNode(color: UIColor.redColor(), size: CGSizeMake(80, 30))
+        let clearLabel = SKLabelNode(text: "Clear")
+        clearLabel.fontSize = 20
+        clearLabel.fontName = "AvenirNext-Bold"
+        clearLabel.fontColor = UIColor.whiteColor()
+        clearLabel.position = CGPointMake(0, -8)
+        self.clearButton.addChild(clearLabel)
+        self.clearButton.position = CGPointMake(UIScreen.mainScreen().bounds.size.width  / 2 + 400, 510)
+        self.addChild(self.clearButton)
         
         createPianoKeys()
     }
@@ -100,6 +111,17 @@ class GameScene: SKScene, UITextViewDelegate {
             for touchedNode in self.nodesAtPoint(location) {
                 let touchedSkNode = touchedNode as? SKSpriteNode
                 if (touchedSkNode != nil) {
+                    if (touchedSkNode == self.clearButton) {
+                        for keyNode in self.pianoKeyNodes {
+                            let keyModel = keyNode.userData!.objectForKey("keyModel") as! PianoKeyModel
+                            keyModel.isSelected = false
+                            keyNode.color = keyModel.defaultColor
+                        }
+                        self.shouldUpdate = true
+                        self.lastTouchStartTime = NSDate()
+                        return
+                    }
+                    
                     if (touchedSkNode?.userData != nil) {
                         let pianoKeyModel = touchedSkNode?.userData!.objectForKey("keyModel") as! PianoKeyModel
                         if (pianoKeyModel.isSelected!) {
@@ -127,7 +149,7 @@ class GameScene: SKScene, UITextViewDelegate {
             if (self.lastTouchStartTime != nil) {
                 let diff = self.lastTouchStartTime!.timeIntervalSinceNow * -1000.0
                 
-                if (diff > 250) {
+                if (diff > 50) {
                     // Do chord lookup
                     
                     self.chordLabelNode.text = "Chord"
@@ -171,7 +193,11 @@ class GameScene: SKScene, UITextViewDelegate {
                     }
                     noteIndices = noteIndices.sort()
                     
-                    chordLabelText += " " + noteIndices.description
+                    if (noteIndices.count == 0) {
+                        chordLabelText = ""
+                    } else {
+                        chordLabelText += " " + noteIndices.description
+                    }
                     
                     self.chordLabelNode.text = chordLabelText;
                     
@@ -205,7 +231,11 @@ class GameScene: SKScene, UITextViewDelegate {
                         
                     }
                     
-                    scaleDataTextView.text = scalesDescription
+                    if (noteIndices.count == 0) {
+                        scaleDataTextView.text = ""
+                    } else {
+                        scaleDataTextView.text = scalesDescription
+                    }
                     self.shouldUpdate = false
                     
                 }
