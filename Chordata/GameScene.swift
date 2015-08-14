@@ -33,7 +33,7 @@ class GameScene: SKScene, UITextViewDelegate {
         
         
         
-        scaleDataTextView = UITextView(frame: CGRectMake(view.bounds.width / 2 - 260, view.bounds.height / 2 - 100, 620, 440))
+        scaleDataTextView = UITextView(frame: CGRectMake(view.bounds.width / 2 - 360, view.bounds.height / 2 - 100, 820, 440))
         scaleDataTextView.delegate = self
         scaleDataTextView.textColor = UIColor(red: 0.2, green: 0.7, blue: 0.7, alpha: 1.0)
         scaleDataTextView.font = UIFont(name: "AvenirNext-Bold", size: 30)
